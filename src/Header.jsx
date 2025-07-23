@@ -10,7 +10,7 @@ function Header() {
                         <img
                             alt=""
                             src="https://cdn.dribbble.com/users/857299/screenshots/5279698/tm-01_4x.jpg"
-                            width="50"
+                            width="65"
                             height="50"
                             className="d-inline-block align-top rounded"
                         />{' '}

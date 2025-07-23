@@ -1,0 +1,19 @@
+#homepage{
+    background-image: url(https://motivirus.com/wp-content/uploads/2022/07/60ff03d06b2d4f82f39ab9e8_Blog-creatives_e-mail-Marketing-1.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#addedtasksection{
+    background-image: linear-gradient(to bottom , rgb(74, 74, 240), rgb(119, 30, 151));
+    background-repeat: no-repeat;
+    background-size: cover;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
