@@ -1,12 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Card from 'react-bootstrap/Card';
 import ToggleButton from 'react-bootstrap/ToggleButton';
+import { addtaskAPI, gettaskAPI, removetaskAPI } from './services/allApi';
 
 function Homepage() {
   const [show, setShow] = useState(false);
+
+  const [showtask, setShowtask] = useState([])
+
+  const [removetask, setRemovetask] = useState({})
 
   const handleClose = () => {
     handleCancel()
@@ -28,19 +33,57 @@ function Homepage() {
     })
   }
 
-  const handleSubmit = () => {
+  //add task logics
+  const handleSubmit = async () => {
     const { title, description } = details
     console.log(title, description);
     if (!title || !description) {
       alert('Fill the form completely')
 
     } else {
-      alert('success')
+      const reqBody = new FormData()
+      reqBody.append("title", title)
+      reqBody.append("description", description)
+
+      const result = await addtaskAPI(reqBody)
+      console.log(result);
+
+      if (result.status == 200) {
+        alert(`Task added successfully`)
+      } else if (result.status == 406) {
+        alert(result.response.data)
+      } else {
+        alert(`Something went wrong`)
+      }
+
       handleClose()
     }
 
+  }
+  //get Task logics
+  const getTask = async () => {
+    const result = await gettaskAPI()
+    setShowtask(result.data)
 
   }
+
+  // delete task logics
+  const handleDelete = async(id)=>{
+    const result = await removetaskAPI(id)
+    console.log(result);
+    if(result.status==200){
+      setRemovetask(result)
+      alert(`Task Deleted successfully`)
+    }else{
+      alert(`error`)
+    }
+    
+  }
+  console.log(showtask);
+  useEffect(() => {
+    getTask()
+  }, [removetask])
+
 
   return (
     <>
@@ -81,13 +124,12 @@ function Homepage() {
           <div className="row">
 
             {/* div for a single card */}
-            <div className="col-lg-3 col-md-6 col-12 d-flex justify-content-center align-items-center p-1">
+           {showtask?.map((item)=>( <div className="col-lg-3 col-md-6 col-12 d-flex justify-content-center align-items-center p-1">
               <Card style={{ width: '18rem', fontWeight: "bold" }} className='rounded text-center py-lg-3 py-2  my-lg-4 my-2  bg-primary text-light'>
                 <Card.Body>
-                  <Card.Title >Card Title</Card.Title>
+                  <Card.Title >{item.title}</Card.Title>
                   <Card.Text>
-                    Some quick example text to build on the card title and make up the
-                    bulk of the card's content.
+                   {item.description}
                   </Card.Text>
                   {/* div for the buttons */}
                   <div className='d-flex justify-content-between mt-lg-3 mt-2'>
@@ -103,11 +145,11 @@ function Homepage() {
                     >
                       Checked
                     </ToggleButton>
-                    <button className='btn btn-danger rounded'>Delete</button>
+                    <button className='btn btn-danger rounded' onClick={()=>handleDelete(item?._id)}>Delete</button>
                   </div>
                 </Card.Body>
               </Card>
-            </div>
+            </div>))}
 
           </div>
 
